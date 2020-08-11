@@ -10,7 +10,7 @@ use structopt::StructOpt;
 )]
 struct Args {
     /// The kakoune session to connect to
-    #[structopt(name = "kak-session")] 
+    #[structopt(name = "kak-session")]
     session: String,
     /// The directory in which to open broot
     base_dir: Option<String>,
@@ -19,10 +19,9 @@ struct Args {
 fn main() -> anyhow::Result<()> {
     let Args { session, base_dir } = Args::from_args();
 
-    let broot_output = get_broot_output(base_dir)?;
-    let broot_output = broot_output.trim();
-    
     loop {
+        let broot_output = get_broot_output(base_dir.clone())?;
+        let broot_output = broot_output.trim();
         if broot_output.is_empty() {
             break;
         } else {
@@ -47,11 +46,12 @@ fn edit_file(session: &str, file: &str) -> anyhow::Result<()> {
         ":q<ret>".to_string(),
     ]))?;
 
-    kak_command
-        .stdin
-        .as_mut()
-        .unwrap()
-        .write_all(request.as_bytes())?;
+    let kak_stdin = kak_command.stdin.as_mut().unwrap();
+    kak_stdin.write_all(request.as_bytes())?;
+    kak_stdin.flush()?;
+    
+    std::thread::sleep(std::time::Duration::from_millis(100));
+
     kak_command.wait()?;
     Ok(())
 }
@@ -60,7 +60,7 @@ fn get_broot_output(base_dir: Option<String>) -> anyhow::Result<String> {
     let broot_output = Command::new("broot")
         .stderr(Stdio::inherit())
         .stdin(Stdio::inherit())
-        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
         .args(base_dir)
         .output()?;
     Ok(String::from_utf8(broot_output.stdout)?)
