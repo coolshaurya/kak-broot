@@ -2,6 +2,12 @@
 name = "kak-broot"
 version = "0.1.0"
 authors = ["Shaurya Shubham <shauryashubham1234567890@gmail.com>"]
+license = "MIT"
+description = "A wrapper around kakoune and broot that allows you to use broot to open files in kakoune"
+readme = "README.md"
+repository = "https://github.com/coolshaurya/kak-broot"
+homepage = "https://github.com/coolshaurya/kak-broot"
+categories = ["command-line-utilities"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
