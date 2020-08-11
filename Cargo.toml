@@ -1,6 +1,6 @@
 [package]
 name = "kak-broot"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["Shaurya Shubham <shauryashubham1234567890@gmail.com>"]
 license = "MIT"
 description = "A wrapper around kakoune and broot that allows you to use broot to open files in kakoune"
